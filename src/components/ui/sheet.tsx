@@ -1,64 +1,67 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { X } from '../icons'
+import * as React from "react";
+import { Slot } from "./slot";
+import { X } from "../icons";
 
 interface SheetContextValue {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const SheetContext = React.createContext<SheetContextValue>({
   open: false,
   onOpenChange: () => {},
-})
+});
 
 export function Sheet({
   children,
   open: controlledOpen,
   onOpenChange,
 }: {
-  children: React.ReactNode
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
+  children: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false)
-  const isControlled = controlledOpen !== undefined
-  const open = isControlled ? controlledOpen : uncontrolledOpen
-  const handleOpenChange = onOpenChange || setUncontrolledOpen
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : uncontrolledOpen;
+  const handleOpenChange = onOpenChange || setUncontrolledOpen;
 
   return (
     <SheetContext.Provider value={{ open, onOpenChange: handleOpenChange }}>
       {children}
     </SheetContext.Provider>
-  )
+  );
 }
 
 export function SheetTrigger({
-  children,
   asChild,
+  children,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }) {
-  const { onOpenChange } = React.useContext(SheetContext)
+  const { onOpenChange } = React.useContext(SheetContext);
+  const Comp = asChild ? Slot : "button";
+
   return (
-    <span onClick={() => onOpenChange(true)} className="inline-block cursor-pointer">
+    <Comp onClick={() => onOpenChange(true)} {...props}>
       {children}
-    </span>
-  )
+    </Comp>
+  );
 }
 
 export function SheetContent({
   children,
-  side = 'right',
-  className = '',
+  side = "right",
+  className = "",
 }: {
-  children: React.ReactNode
-  side?: 'right' | 'left'
-  className?: string
+  children: React.ReactNode;
+  side?: "right" | "left";
+  className?: string;
 }) {
-  const { open, onOpenChange } = React.useContext(SheetContext)
+  const { open, onOpenChange } = React.useContext(SheetContext);
 
-  if (!open) return null
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs transition-opacity duration-300">
@@ -75,13 +78,29 @@ export function SheetContent({
         {children}
       </div>
     </div>
-  )
+  );
 }
 
-export function SheetHeader({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={`flex flex-col space-y-2 text-center sm:text-left ${className}`} {...props} />
+export function SheetHeader({
+  className = "",
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={`flex flex-col space-y-2 text-center sm:text-left ${className}`}
+      {...props}
+    />
+  );
 }
 
-export function SheetTitle({ className = '', ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={`text-lg font-semibold text-white ${className}`} {...props} />
+export function SheetTitle({
+  className = "",
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
+  return (
+    <h2
+      className={`text-lg font-semibold text-white ${className}`}
+      {...props}
+    />
+  );
 }
