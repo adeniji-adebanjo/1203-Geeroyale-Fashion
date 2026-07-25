@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { X } from 'lucide-react'
+import { X } from '../icons'
 
 export function Dialog({
   children,

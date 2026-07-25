@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Instagram, ArrowUpRight } from 'lucide-react'
+import { Instagram, ArrowUpRight } from './icons'
 import { Button } from './ui/button'
 
 const igFeed = [

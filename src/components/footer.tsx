@@ -1,6 +1,6 @@
 'use client'
 
-import { Instagram, ExternalLink, MessageCircle, Heart } from 'lucide-react'
+import { Instagram, ExternalLink, MessageCircle, Heart } from './icons'
 
 export default function Footer() {
   const scrollTo = (href: string) => {
