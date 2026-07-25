@@ -1,6 +1,44 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* Custom colors */
+  --color-navy: #0a1128;
+  --color-navy-light: #1a2340;
+  --color-gold: #d4af37;
+  --color-gold-light: #e8cf6d;
+  --color-cream: #faf8f5;
+  --color-charcoal: #1a1a2e;
+
+  /* Custom font families */
+  --font-sans: var(--font-sans), sans-serif;
+  --font-serif: var(--font-serif), serif;
+
+  /* Custom keyframes */
+  --animate-marquee-left: marquee-left 35s linear infinite;
+  --animate-marquee-right: marquee-right 40s linear infinite;
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+  --animate-slide-up: slide-up 0.7s ease-out forwards;
+}
+
+@keyframes marquee-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slide-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
 @layer base {
   :root {
@@ -20,7 +58,7 @@
     background-color: var(--navy);
     color: var(--cream);
     font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiasing;
+    -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
