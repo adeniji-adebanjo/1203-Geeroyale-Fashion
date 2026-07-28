@@ -28,36 +28,37 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
-        <div className="grid md:grid-cols-2 gap-6 items-start">
+        <div className="grid items-start gap-5 sm:gap-6 md:grid-cols-2">
           {/* Product Image */}
-          <div className="relative aspect-[3/4] w-full rounded-md overflow-hidden bg-navy-light border border-white/10">
+          <div className="relative mx-auto aspect-3/4 w-full max-w-64 overflow-hidden rounded-md border border-white/10 bg-navy-light sm:max-w-none">
             <Image
               src={product.image}
               alt={product.name}
               fill
+              sizes="(max-width: 768px) 90vw, 22rem"
               className="object-cover object-top"
             />
             {product.isNew && (
-              <span className="absolute top-3 left-3 bg-gold text-navy text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-xs">
+              <span className="absolute left-3 top-3 rounded-xs bg-gold px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-navy">
                 NEW RELEASE
               </span>
             )}
           </div>
 
           {/* Product Details */}
-          <div className="flex flex-col space-y-5">
-            <div>
-              <span className="text-xs font-bold text-gold uppercase tracking-[0.2em]">
+          <div className="flex flex-col space-y-4 sm:space-y-5">
+            <div className="pr-10 sm:pr-12">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
                 {product.category}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mt-1">
+              <h2 className="mt-1 font-serif text-xl font-bold text-white sm:text-3xl">
                 {product.name}
               </h2>
             </div>
 
             {/* Price section with NGN and USD */}
-            <div className="flex items-baseline gap-3 p-3 rounded-md bg-navy-light border border-white/5">
-              <span className="text-2xl font-extrabold text-gold">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-md border border-white/5 bg-navy-light p-3">
+              <span className="text-xl font-extrabold text-gold sm:text-2xl">
                 ₦{product.priceNGN.toLocaleString()}
               </span>
               <span className="text-sm font-semibold text-white/60">
@@ -72,10 +73,10 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             {/* Size Selector */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-bold text-white uppercase tracking-wider">
+                <span className="font-bold uppercase tracking-wider text-white">
                   Select Size
                 </span>
-                <span className="text-white/50">Unisex Fit</span>
+                <span className="text-white/50">Unisex fit</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((size) => {
@@ -84,12 +85,13 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
+                      aria-pressed={isSelected}
                       className={`
-                        h-10 px-4 rounded-md text-xs font-bold transition-all border cursor-pointer
+                        h-11 min-w-11 cursor-pointer rounded-md border px-4 text-xs font-bold transition-all
                         ${
                           isSelected
-                            ? 'bg-gold text-navy border-gold shadow-md'
-                            : 'bg-navy-light border-white/15 text-white/80 hover:border-gold/50'
+                            ? 'border-gold bg-gold text-navy shadow-md'
+                            : 'border-white/15 bg-navy-light text-white/80 hover:border-gold/50'
                         }
                       `}
                     >
@@ -107,15 +109,15 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                 <span>Fast nationwide delivery across Nigeria & international shipping</span>
               </div>
               <div className="flex items-center gap-2">
-                <Check className="h-3.5 w-3.5 text-gold shrink-0" />
-                <span>Authentic Gee Royale Afro-Urban quality</span>
+                <Check className="h-3.5 w-3.5 shrink-0 text-gold" />
+                <span>Gee Royale craftsmanship and premium materials</span>
               </div>
             </div>
 
             {/* Buy Now CTA */}
             <Button
               onClick={handleWhatsAppOrder}
-              className="w-full bg-gold hover:bg-gold-light text-navy font-bold uppercase tracking-[0.15em] h-14 text-xs sm:text-sm shadow-xl transition-all hover:scale-[1.01]"
+              className="h-13 w-full bg-gold text-xs font-bold uppercase tracking-[0.15em] text-navy shadow-xl transition-all hover:scale-[1.01] hover:bg-gold-light sm:h-14 sm:text-sm"
             >
               <ShoppingBag className="mr-2 h-4 w-4" />
               Order via WhatsApp ({currentSize})

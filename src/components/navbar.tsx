@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Menu, Instagram, ShoppingBag, X } from './icons'
+import Image from 'next/image'
+import { Menu, Instagram, ShoppingBag } from './icons'
 import { Button } from './ui/button'
+import { navLinks, site } from '../data/site'
 import {
   Sheet,
   SheetContent,
@@ -10,12 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from './ui/sheet'
-
-const navLinks = [
-  { label: 'Shop', href: '#shop' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
-]
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -30,20 +26,26 @@ export default function Navbar() {
   }, [])
 
   /* ── Smooth scroll handler ────────────────────── */
-  const scrollTo = useCallback(
+  const scrollTo = useCallback((href: string) => {
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
+  /* Closing the sheet releases the body scroll lock, so the scroll has to
+     wait a frame or the restored position cancels it. */
+  const scrollToFromMenu = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
       e.preventDefault()
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
       setMobileOpen(false)
+      requestAnimationFrame(() => requestAnimationFrame(() => scrollTo(href)))
     },
-    [],
+    [scrollTo],
   )
 
   return (
     <nav
       className={`
         fixed top-0 inset-x-0 z-50
-        bg-navy/80 backdrop-blur-md
+        bg-navy/85 backdrop-blur-md
         border-b transition-all duration-300
         ${
           scrolled
@@ -53,7 +55,7 @@ export default function Navbar() {
       `}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 md:h-20 items-center justify-between">
+        <div className="flex h-16 items-center justify-between gap-3 md:h-20">
           {/* ── Brand ──────────────────────────────── */}
           <a
             href="#"
@@ -61,27 +63,36 @@ export default function Navbar() {
               e.preventDefault()
               window.scrollTo({ top: 0, behavior: 'smooth' })
             }}
-            className="flex items-baseline gap-1.5 select-none"
+            aria-label="1203 by Gee Royale — back to top"
+            className="flex shrink-0 items-center gap-2.5 select-none"
           >
-            <span className="font-serif text-3xl md:text-4xl font-bold text-gold leading-none">
-              1203
-            </span>
-            <span className="text-[10px] md:text-xs font-bold tracking-widest text-white/60 uppercase">
-              RTW
+            <Image
+              src="/1203-wordmark-light.png"
+              alt="1203"
+              width={1045}
+              height={492}
+              priority
+              className="h-7 w-auto md:h-9"
+            />
+            <span className="hidden h-6 w-px bg-white/20 sm:block" />
+            <span className="hidden text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55 sm:block">
+              by Gee Royale
             </span>
           </a>
 
           {/* ── Desktop Nav Links ──────────────────── */}
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden items-center gap-6 lg:flex xl:gap-8">
             {navLinks.map(({ label, href }) => (
               <li key={href}>
                 <a
                   href={href}
-                  onClick={(e) => scrollTo(e, href)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    scrollTo(href)
+                  }}
                   className="
-                    text-xs font-bold uppercase tracking-[0.15em]
-                    text-white/70 hover:text-gold
-                    transition-colors duration-300
+                    whitespace-nowrap text-xs font-bold uppercase tracking-[0.15em]
+                    text-white/70 transition-colors duration-300 hover:text-gold
                   "
                 >
                   {label}
@@ -91,71 +102,97 @@ export default function Navbar() {
           </ul>
 
           {/* ── Desktop Right Actions ──────────────── */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden shrink-0 items-center gap-2 lg:flex">
             <a
-              href="https://www.instagram.com/1203_rtw/"
+              href={site.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Follow us on Instagram"
+              aria-label={`Follow 1203 on Instagram (${site.instagramHandle})`}
             >
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white/70 hover:text-gold hover:bg-white/5 transition-colors duration-300"
+                className="text-white/70 transition-colors duration-300 hover:bg-white/5 hover:text-gold"
               >
                 <Instagram className="h-5 w-5" />
               </Button>
             </a>
 
-            <a href="#shop" onClick={(e) => scrollTo(e, '#shop')}>
-              <Button className="bg-gold hover:bg-gold-light text-navy font-bold text-xs uppercase tracking-[0.15em] px-5 py-2 transition-all duration-300">
+            <a
+              href="#shop"
+              onClick={(e) => {
+                e.preventDefault()
+                scrollTo('#shop')
+              }}
+            >
+              <Button className="bg-gold px-5 py-2 text-xs font-bold uppercase tracking-[0.15em] text-navy transition-all duration-300 hover:bg-gold-light">
                 <ShoppingBag className="mr-2 h-4 w-4" />
                 Shop Now
               </Button>
             </a>
           </div>
 
-          {/* ── Mobile Hamburger ───────────────────── */}
-          <div className="md:hidden">
+          {/* ── Mobile / Tablet Menu ───────────────── */}
+          <div className="flex items-center gap-1 lg:hidden">
+            <a
+              href={site.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Follow 1203 on Instagram (${site.instagramHandle})`}
+              className="hidden sm:block"
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-11 w-11 text-white/70 hover:bg-white/5 hover:text-gold"
+              >
+                <Instagram className="h-5 w-5" />
+              </Button>
+            </a>
+
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-white/80 hover:text-gold hover:bg-white/5"
+                  className="h-11 w-11 text-white hover:bg-white/10 hover:text-gold"
                   aria-label="Open menu"
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
 
-              <SheetContent
-                side="right"
-                className="w-[300px] bg-navy border-l border-white/10 p-0"
-              >
-                <SheetHeader className="px-6 pt-6 pb-4 border-b border-white/10">
-                  <SheetTitle className="flex items-baseline gap-1.5">
-                    <span className="font-serif text-2xl font-bold text-gold">
-                      1203
-                    </span>
-                    <span className="text-[10px] font-bold tracking-widest text-white/60 uppercase">
-                      RTW
+              <SheetContent side="right">
+                <SheetHeader className="border-b border-white/10 px-6 pb-5 pt-6">
+                  <SheetTitle className="flex items-center gap-2.5">
+                    <Image
+                      src="/1203-wordmark-light.png"
+                      alt="1203"
+                      width={1045}
+                      height={492}
+                      className="h-7 w-auto"
+                    />
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                      by Gee Royale
                     </span>
                   </SheetTitle>
+                  <p className="text-[11px] font-light text-white/45">
+                    {site.tagline}
+                  </p>
                 </SheetHeader>
 
-                <div className="flex flex-col px-6 py-8">
-                  {/* Nav links */}
-                  <ul className="flex flex-col gap-6">
+                <nav className="flex flex-col px-4 py-4">
+                  <ul className="flex flex-col">
                     {navLinks.map(({ label, href }) => (
                       <li key={href}>
                         <a
                           href={href}
-                          onClick={(e) => scrollTo(e, href)}
+                          onClick={(e) => scrollToFromMenu(e, href)}
                           className="
-                            text-sm font-bold uppercase tracking-[0.15em]
-                            text-white/70 hover:text-gold
-                            transition-colors duration-300
+                            flex min-h-12 items-center rounded-md px-3
+                            text-sm font-bold uppercase tracking-[0.15em] text-white/75
+                            transition-colors duration-200 hover:bg-white/5 hover:text-gold
+                            active:bg-white/10
                           "
                         >
                           {label}
@@ -163,30 +200,27 @@ export default function Navbar() {
                       </li>
                     ))}
                   </ul>
+                </nav>
 
-                  {/* Divider */}
-                  <div className="my-8 h-px bg-white/10" />
-
-                  {/* Instagram */}
+                <div className="mt-auto space-y-4 border-t border-white/10 px-6 pt-6 pb-safe">
                   <a
-                    href="https://www.instagram.com/1203_rtw/"
+                    href={site.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-white/70 hover:text-gold transition-colors duration-300 mb-6"
+                    className="flex min-h-11 items-center gap-3 text-white/70 transition-colors duration-300 hover:text-gold"
                   >
-                    <Instagram className="h-5 w-5" />
+                    <Instagram className="h-5 w-5 shrink-0" />
                     <span className="text-sm font-bold uppercase tracking-[0.15em]">
-                      Instagram
+                      {site.instagramHandle}
                     </span>
                   </a>
 
-                  {/* Shop Now CTA */}
                   <a
                     href="#shop"
-                    onClick={(e) => scrollTo(e, '#shop')}
-                    className="w-full"
+                    onClick={(e) => scrollToFromMenu(e, '#shop')}
+                    className="block w-full"
                   >
-                    <Button className="w-full bg-gold hover:bg-gold-light text-navy font-bold text-xs uppercase tracking-[0.15em] px-5 py-3 transition-all duration-300">
+                    <Button className="h-12 w-full bg-gold text-xs font-bold uppercase tracking-[0.15em] text-navy transition-all duration-300 hover:bg-gold-light">
                       <ShoppingBag className="mr-2 h-4 w-4" />
                       Shop Now
                     </Button>

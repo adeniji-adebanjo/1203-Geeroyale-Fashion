@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
-// 1203 RTW – Product Data
-// Affordable Afro-Urban Ready-to-Wear by Gee Royale
+// 1203 – Product Data
+// Afro-Urban Ready-to-Wear by Gee Royale
 // ─────────────────────────────────────────────────────────────
 
 export interface Product {
@@ -188,7 +188,7 @@ export const WHATSAPP_NUMBER = '';
 
 export function getWhatsAppLink(product: Product, size: string): string {
   const message = encodeURIComponent(
-    `Hi, I'd like to order the ${product.name} (Size: ${size}) from 1203 RTW. Price: ₦${product.priceNGN.toLocaleString()} / $${product.priceUSD}`
+    `Hi, I'd like to order the ${product.name} (Size: ${size}) from 1203 by Gee Royale. Price: ₦${product.priceNGN.toLocaleString()} / $${product.priceUSD}`
   );
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;

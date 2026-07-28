@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -iE \"^\\(sharp|jimp|pngjs|canvas\\)$\")",
+      "Bash(node -e ' *)",
+      "Bash(node \"C:/Users/ADEBAN~1.ADE/AppData/Local/Temp/claude/c--Users-adebanjo-adeniji-Documents-personal-files-1203-Geeroyale-Fashion/03427125-b1b3-402c-b3e5-0d27429ee066/scratchpad/gen-assets.js\" \"c:/Users/adebanjo.adeniji/Documents/personal-files/1203-Geeroyale-Fashion\")"
+    ]
+  }
+}

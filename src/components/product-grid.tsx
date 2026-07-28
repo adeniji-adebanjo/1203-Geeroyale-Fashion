@@ -15,31 +15,32 @@ export default function ProductGrid() {
       : products.filter((p) => p.category === activeCategory)
 
   return (
-    <section id="shop" className="py-24 bg-navy relative">
+    <section id="shop" className="relative bg-navy py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center space-y-3 mb-12">
-          <span className="text-xs font-semibold uppercase tracking-[0.35em] text-gold">
-            Shop 1203 RTW
+        <div className="mb-10 space-y-3 text-center sm:mb-12">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold sm:text-xs sm:tracking-[0.35em]">
+            Shop 1203
           </span>
-          <h2 className="font-serif text-4xl sm:text-5xl font-bold text-white">
-            Ready To Wear <span className="italic text-gold">Collection</span>
+          <h2 className="font-serif text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+            Ready-to-Wear <span className="italic text-gold">Collection</span>
           </h2>
-          <p className="text-white/60 max-w-lg mx-auto text-sm sm:text-base font-light">
-            Unisex streetwear pieces crafted for style, versatility, and everyday comfort.
+          <p className="mx-auto max-w-lg text-sm font-light text-white/60 sm:text-base">
+            Elevated essentials and statement pieces, cut for everyday
+            expression.
           </p>
         </div>
 
-        {/* Category Filter Tabs */}
-        <div className="flex items-center justify-center gap-2 overflow-x-auto pb-6 mb-8 scrollbar-none">
+        {/* Category Filter Tabs — scrolls edge-to-edge on small screens */}
+        <div className="edge-scroll mb-8 flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none sm:mb-10 sm:justify-center sm:pb-6">
           <button
             onClick={() => setActiveCategory('All')}
             className={`
-              px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer
+              shrink-0 cursor-pointer whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all sm:px-5
               ${
                 activeCategory === 'All'
                   ? 'bg-gold text-navy shadow-md'
-                  : 'bg-navy-light/60 border border-white/15 text-white/70 hover:border-gold/40 hover:text-white'
+                  : 'border border-white/15 bg-navy-light/60 text-white/70 hover:border-gold/40 hover:text-white'
               }
             `}
           >
@@ -52,11 +53,11 @@ export default function ProductGrid() {
                 key={category}
                 onClick={() => setActiveCategory(category)}
                 className={`
-                  px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer
+                  shrink-0 cursor-pointer whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all sm:px-5
                   ${
                     activeCategory === category
                       ? 'bg-gold text-navy shadow-md'
-                      : 'bg-navy-light/60 border border-white/15 text-white/70 hover:border-gold/40 hover:text-white'
+                      : 'border border-white/15 bg-navy-light/60 text-white/70 hover:border-gold/40 hover:text-white'
                   }
                 `}
               >
@@ -67,7 +68,7 @@ export default function ProductGrid() {
         </div>
 
         {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}

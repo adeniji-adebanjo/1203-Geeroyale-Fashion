@@ -1,34 +1,56 @@
-'use client'
+"use client";
 
-import { Instagram, ExternalLink, MessageCircle, Heart } from './icons'
+import Image from "next/image";
+import { Instagram, ExternalLink, MessageCircle, Heart } from "./icons";
+import { navLinks, site } from "../data/site";
+import Link from "next/link";
 
 export default function Footer() {
   const scrollTo = (href: string) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
-  }
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <footer id="contact" className="bg-charcoal text-white border-t border-white/10 pt-16 pb-12">
+    <footer
+      id="contact"
+      className="border-t border-white/10 bg-charcoal pt-14 pb-10 text-white sm:pt-16 sm:pb-12"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12">
+        {/* Tagline band */}
+        <div className="flex flex-col items-center gap-3 border-b border-white/10 pb-10 text-center">
+          <Image
+            src="/1203-logo-light.png"
+            alt="1203 — Afro-urban ready-to-wear by Gee Royale"
+            width={1045}
+            height={639}
+            sizes="(max-width: 640px) 70vw, 20rem"
+            className="h-auto w-52 max-w-full sm:w-64"
+          />
+          <p className="font-serif text-xl italic text-gold sm:text-2xl">
+            {site.tagline}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
           {/* Col 1: Brand Info */}
-          <div className="space-y-4">
-            <div className="flex items-baseline gap-1.5">
-              <span className="font-serif text-3xl font-bold text-gold">1203</span>
-              <span className="text-xs font-bold tracking-widest text-white/60 uppercase">RTW</span>
-            </div>
-            <p className="text-xs text-white/60 leading-relaxed font-light">
-              Premium Unisex Afro-Urban Ready To Wear. Affordable street luxury crafted by Gee Royale in Lagos, Nigeria.
+          <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
+              The Label
+            </h3>
+            <p className="text-xs font-light leading-relaxed text-white/60">
+              Afro-urban ready-to-wear for a generation that values style,
+              culture and individuality — versatile garments for work, leisure,
+              travel and social life.
             </p>
-            <div className="pt-2">
-              <span className="text-[10px] uppercase tracking-widest text-gold font-semibold block">
+            <div className="pt-1">
+              <span className="block text-[10px] font-semibold uppercase tracking-widest text-gold">
                 Parent Brand
               </span>
               <a
-                href="https://geeroyalefashion.com"
+                href={site.parentUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-white/80 hover:text-gold transition-colors inline-flex items-center gap-1 mt-0.5"
+                className="mt-1 inline-flex min-h-9 items-center gap-1 text-xs text-white/80 transition-colors hover:text-gold"
               >
                 geeroyalefashion.com
                 <ExternalLink className="h-3 w-3" />
@@ -41,31 +63,17 @@ export default function Footer() {
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
               Quick Links
             </h3>
-            <ul className="space-y-2.5 text-xs text-white/70">
-              <li>
-                <button
-                  onClick={() => scrollTo('#shop')}
-                  className="hover:text-gold transition-colors cursor-pointer"
-                >
-                  Shop Catalog
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => scrollTo('#about')}
-                  className="hover:text-gold transition-colors cursor-pointer"
-                >
-                  About 1203
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => scrollTo('#contact')}
-                  className="hover:text-gold transition-colors cursor-pointer"
-                >
-                  Contact & Orders
-                </button>
-              </li>
+            <ul className="space-y-1 text-xs text-white/70">
+              {navLinks.map(({ label, href }) => (
+                <li key={href}>
+                  <button
+                    onClick={() => scrollTo(href)}
+                    className="flex min-h-9 cursor-pointer items-center transition-colors hover:text-gold"
+                  >
+                    {label}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -74,16 +82,16 @@ export default function Footer() {
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
               Connect With Us
             </h3>
-            <ul className="space-y-3 text-xs text-white/70">
+            <ul className="space-y-1 text-xs text-white/70">
               <li>
                 <a
-                  href="https://www.instagram.com/1203_rtw/"
+                  href={site.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 hover:text-gold transition-colors"
+                  className="inline-flex min-h-9 items-center gap-2 transition-colors hover:text-gold"
                 >
-                  <Instagram className="h-4 w-4 text-gold" />
-                  <span>@1203_rtw on Instagram</span>
+                  <Instagram className="h-4 w-4 shrink-0 text-gold" />
+                  <span>{site.instagramHandle} on Instagram</span>
                 </a>
               </li>
               <li>
@@ -91,9 +99,9 @@ export default function Footer() {
                   href="https://wa.me/2340000000000"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 hover:text-gold transition-colors"
+                  className="inline-flex min-h-9 items-center gap-2 transition-colors hover:text-gold"
                 >
-                  <MessageCircle className="h-4 w-4 text-gold" />
+                  <MessageCircle className="h-4 w-4 shrink-0 text-gold" />
                   <span>WhatsApp Orders</span>
                 </a>
               </li>
@@ -105,24 +113,40 @@ export default function Footer() {
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
               Brand Info
             </h3>
-            <p className="text-xs text-white/60 leading-relaxed font-light">
-              Designed & Hand-finished in Lagos, Nigeria. Worldwide shipping available upon request.
+            <p className="text-xs font-light leading-relaxed text-white/60">
+              Designed and hand-finished in {site.locality}, {site.country}.
+              Worldwide shipping available on request.
             </p>
-            <div className="p-3 rounded-md bg-navy border border-white/10 text-[11px] text-white/70">
-              <span className="text-gold font-bold block mb-0.5">Order Inquiries:</span>
-              <span>All orders are fulfilled via WhatsApp for custom sizing & delivery setup.</span>
+            <div className="rounded-md border border-white/10 bg-navy p-3 text-[11px] text-white/70">
+              <span className="mb-0.5 block font-bold text-gold">
+                Order Inquiries:
+              </span>
+              <span>
+                All orders are fulfilled via WhatsApp for custom sizing and
+                delivery setup.
+              </span>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-white/40 gap-4">
-          <p>© {new Date().getFullYear()} 1203 RTW. A product of Gee Royale. All rights reserved.</p>
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-8 text-center text-xs text-white/40 sm:flex-row sm:text-left">
+          <p>
+            © {new Date().getFullYear()} {site.fullName}. All rights reserved.
+          </p>
           <p className="inline-flex items-center gap-1">
-            Crafted with <Heart className="h-3 w-3 text-gold fill-gold" /> in Lagos, Nigeria
+            Developed with <Heart className="h-3 w-3 fill-gold text-gold" /> by{" "}
+            <Link
+              href={site.developerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold hover:underline"
+            >
+              {site.developerName}
+            </Link>
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }

@@ -1,33 +1,50 @@
 import * as React from "react";
-import { useComposedRefs } from "./use-composed-refs";
 
 interface SlotProps extends React.HTMLAttributes<HTMLElement> {
   children?: React.ReactNode;
 }
 
+/** In React 19 `ref` is an ordinary prop, so the child carries it in `props`. */
+type SlottableElement = React.ReactElement<
+  React.HTMLAttributes<HTMLElement> & { ref?: React.Ref<HTMLElement> }
+>;
+
+/**
+ * Renders its props onto its single child instead of a wrapper element,
+ * so callers can do `<SheetTrigger asChild><Button /></SheetTrigger>`.
+ */
 export const Slot = React.forwardRef<HTMLElement, SlotProps>(
   ({ children, ...props }, ref) => {
+    // If there's no valid child there's nothing to render — e.g. a bare string.
     if (!React.isValidElement(children)) {
-      // If there's no valid child, there's nothing to render.
-      // This can happen if the child is a string or null.
       return null;
     }
 
-    // The type assertion is safe here because we've validated it's a React Element.
-    const childProps = children.props as React.HTMLAttributes<HTMLElement>;
-    const composedRef = useComposedRefs(ref, (children as any).ref);
+    const child = children as SlottableElement;
 
-    return React.cloneElement(children as React.ReactElement, {
-      ...mergeProps(props, childProps),
-      // The 'as any' is necessary here because TypeScript can't reconcile
-      // the different ref types (e.g., RefCallback, RefObject).
-      // This is a well-known and accepted pattern for this use case.
-      ref: composedRef as any,
+    return React.cloneElement(child, {
+      ...mergeProps(props, child.props),
+      ref: composeRefs(ref, child.props.ref),
     });
   },
 );
 
 Slot.displayName = "Slot";
+
+/** Plain function rather than a hook, so it stays callable after the early return. */
+function composeRefs<T>(
+  ...refs: (React.Ref<T> | undefined)[]
+): React.RefCallback<T> {
+  return (node) => {
+    for (const ref of refs) {
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        (ref as React.RefObject<T | null>).current = node;
+      }
+    }
+  };
+}
 
 function mergeProps(
   slotProps: React.HTMLAttributes<HTMLElement>,

@@ -20,41 +20,51 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
   return (
     <div
       onClick={() => onQuickView(product)}
-      className="group relative flex flex-col overflow-hidden rounded-md border border-white/10 bg-navy-light/60 hover:border-gold/50 transition-all duration-300 shadow-md hover:shadow-xl cursor-pointer"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onQuickView(product)
+        }
+      }}
+      className="group relative flex cursor-pointer flex-col overflow-hidden rounded-md border border-white/10 bg-navy-light/60 shadow-md transition-all duration-300 hover:border-gold/50 hover:shadow-xl focus-visible:border-gold focus-visible:outline-none"
     >
       {/* Image Container */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-navy">
+      <div className="relative aspect-3/4 w-full overflow-hidden bg-navy">
         <Image
           src={product.image}
           alt={product.name}
           fill
+          sizes="(max-width: 640px) 50vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 22vw"
           className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
         />
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+        <div className="absolute left-2 top-2 z-10 flex flex-col gap-1.5 sm:left-3 sm:top-3">
           {product.isNew && (
-            <span className="bg-gold text-navy text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-xs shadow-md">
+            <span className="rounded-xs bg-gold px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-navy shadow-md sm:px-2 sm:text-[10px]">
               NEW
             </span>
           )}
           {product.isBestseller && (
-            <span className="bg-white/90 text-navy text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-xs shadow-md">
+            <span className="rounded-xs bg-white/90 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-navy shadow-md sm:px-2 sm:text-[10px]">
               POPULAR
             </span>
           )}
         </div>
 
-        {/* Quick View Hover Overlay */}
-        <div className="absolute inset-0 bg-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
+        {/* Quick View — hover on pointer devices only */}
+        <div className="absolute inset-0 hidden items-center justify-center bg-navy/40 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:flex">
           <Button
             variant="outline"
             size="sm"
+            tabIndex={-1}
             onClick={(e) => {
               e.stopPropagation()
               onQuickView(product)
             }}
-            className="border-white/40 bg-navy/80 hover:bg-gold hover:text-navy text-white text-xs font-bold uppercase tracking-wider shadow-lg"
+            className="border-white/40 bg-navy/80 text-xs font-bold uppercase tracking-wider text-white shadow-lg hover:bg-gold hover:text-navy"
           >
             <Eye className="mr-1.5 h-3.5 w-3.5" />
             Quick View
@@ -63,22 +73,22 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
       </div>
 
       {/* Product Details */}
-      <div className="flex flex-col flex-1 p-4 space-y-3">
+      <div className="flex flex-1 flex-col space-y-2 p-3 sm:space-y-3 sm:p-4">
         <div className="space-y-1">
-          <span className="text-[10px] font-semibold text-gold uppercase tracking-widest block">
+          <span className="block text-[9px] font-semibold uppercase tracking-widest text-gold sm:text-[10px]">
             {product.category}
           </span>
-          <h3 className="text-sm sm:text-base font-semibold text-white group-hover:text-gold transition-colors line-clamp-1">
+          <h3 className="line-clamp-2 text-xs font-semibold text-white transition-colors group-hover:text-gold sm:line-clamp-1 sm:text-base">
             {product.name}
           </h3>
         </div>
 
         {/* Price display with NGN and USD */}
-        <div className="flex items-baseline gap-2 mt-auto">
-          <span className="text-base sm:text-lg font-bold text-white">
+        <div className="mt-auto flex flex-wrap items-baseline gap-x-2">
+          <span className="text-sm font-bold text-white sm:text-lg">
             ₦{product.priceNGN.toLocaleString()}
           </span>
-          <span className="text-xs text-white/50 font-medium">
+          <span className="text-[11px] font-medium text-white/50 sm:text-xs">
             / ${product.priceUSD}
           </span>
         </div>
@@ -86,10 +96,11 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
         {/* Buy Now WhatsApp Button */}
         <Button
           onClick={handleBuyNow}
-          className="w-full bg-gold hover:bg-gold-light text-navy text-xs font-extrabold uppercase tracking-wider h-10 mt-2 transition-all shadow-md"
+          aria-label={`Order ${product.name} on WhatsApp`}
+          className="mt-1 h-10 w-full bg-gold px-2 text-[10px] font-extrabold uppercase tracking-wider text-navy shadow-md transition-all hover:bg-gold-light sm:mt-2 sm:text-xs"
         >
-          <ShoppingBag className="mr-1.5 h-3.5 w-3.5" />
-          Buy Now (WhatsApp)
+          <ShoppingBag className="mr-1.5 h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">Order on WhatsApp</span>
         </Button>
       </div>
     </div>

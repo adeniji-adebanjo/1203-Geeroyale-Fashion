@@ -21,16 +21,19 @@ export default function Marquee() {
   return (
     <section className="relative overflow-hidden bg-navy-light py-16 sm:py-20 border-y border-white/5">
       {/* Decorative motif overlay */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#d4af37_1px,transparent_1px)] [background-size:16px_16px]" />
+      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#d4af37_1px,transparent_1px)] bg-size-[16px_16px]" />
 
       <div className="relative z-10 space-y-8">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.4em] text-gold">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold sm:text-xs sm:tracking-[0.4em]">
             The 1203 Wardrobe
           </span>
-          <h2 className="mt-2 font-serif text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-            Crafted for the <span className="italic text-gold">streets</span>
+          <h2 className="mt-2 font-serif text-2xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+            Made to be worn <span className="italic text-gold">every day</span>
           </h2>
+          <p className="mx-auto mt-3 max-w-md text-sm font-light text-white/60">
+            From elevated essentials to statement outerwear.
+          </p>
         </div>
 
         {/* Marquee Row 1 - Left */}
