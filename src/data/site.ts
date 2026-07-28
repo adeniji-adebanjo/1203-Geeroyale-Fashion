@@ -20,7 +20,7 @@ export const site = {
   locality: "Lagos",
   country: "Nigeria",
   developerName: "Adeniji Adebanjo",
-  developerUrl: "https://adebanjo-adeniji.vercel.app",
+  developerUrl: "https://adebanjo-adeniji.netlify.app",
 } as const;
 
 export const navLinks = [
