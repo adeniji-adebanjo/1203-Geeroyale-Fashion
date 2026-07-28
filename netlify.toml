@@ -1,13 +1,17 @@
 # Netlify build configuration
 #
-# Netlify's Next.js Runtime (OpenNext adapter) supports Next.js 13.5+ with zero
-# configuration, so the publish directory is deliberately left unset — the
-# runtime resolves it. Node is pinned because Next 16 requires >= 20.9.0 and
-# older Netlify sites still default to Node 18, which fails the build before
-# anything is published.
+# `publish` must be set explicitly: with no value Netlify defaults it to the
+# repo root, and @netlify/plugin-nextjs rejects a publish directory equal to the
+# base directory ("Your publish directory cannot be the same as the base
+# directory of your site"), so the build succeeded but nothing was ever
+# published. The Next.js Runtime expects `.next`.
+#
+# Node is pinned because Next 16 requires >= 20.9.0 and older Netlify sites
+# still default to Node 18.
 
 [build]
   command = "npm run build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "22"
